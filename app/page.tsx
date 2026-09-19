@@ -1,0 +1,1 @@
+import CareerPilot from "./ui/CareerPilot"; export default function Page(){return <CareerPilot/>}

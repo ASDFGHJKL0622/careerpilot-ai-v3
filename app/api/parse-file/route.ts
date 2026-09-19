@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server"; import {extractFile} from "@/lib/extract";
+export async function POST(req:Request){const f=(await req.formData()).get("file"); if(!(f instanceof File))return NextResponse.json({error:"file required"},{status:400}); try{return NextResponse.json({text:await extractFile(f),filename:f.name})}catch{return NextResponse.json({error:"parse failed"},{status:422})}}
