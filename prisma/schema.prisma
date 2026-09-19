@@ -1,0 +1,9 @@
+generator client { provider="prisma-client-js" }
+datasource db { provider="sqlite" url=env("DATABASE_URL") }
+
+model User { id String @id @default(cuid()); email String @unique; name String?; createdAt DateTime @default(now()); resumes Resume[]; jobs Job[]; sessions InterviewSession[] }
+model Resume { id String @id @default(cuid()); userId String; title String; rawText String; structuredJson String?; score Int?; createdAt DateTime @default(now()); updatedAt DateTime @updatedAt; user User @relation(fields:[userId],references:[id]); matches Match[] }
+model Job { id String @id @default(cuid()); userId String; company String?; title String; jdText String; structuredJson String?; createdAt DateTime @default(now()); user User @relation(fields:[userId],references:[id]); matches Match[] }
+model Match { id String @id @default(cuid()); resumeId String; jobId String; score Int; resultJson String; createdAt DateTime @default(now()); resume Resume @relation(fields:[resumeId],references:[id]); job Job @relation(fields:[jobId],references:[id]) }
+model InterviewSession { id String @id @default(cuid()); userId String; resumeId String?; jobId String?; language String; mode String; score Int?; reportJson String?; createdAt DateTime @default(now()); user User @relation(fields:[userId],references:[id]); answers InterviewAnswer[] }
+model InterviewAnswer { id String @id @default(cuid()); sessionId String; question String; answer String; score Int?; feedback String?; createdAt DateTime @default(now()); session InterviewSession @relation(fields:[sessionId],references:[id]) }
